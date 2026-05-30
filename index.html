@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V4 Paper Mart | A Branch of V3 | Stationery Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #050505;
+            color: #f3f4f6;
+        }
+        html{
+            scroll-behavior: smooth;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-pattern {
+            background-color: #050505;
+            background-image: radial-gradient(#1e3a8a 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+
+        .glow-blue {
+            box-shadow: 0 0 50px -12px rgba(37, 99, 235, 0.3);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .carousel-viewport {
+            overflow: hidden;
+            position: relative;
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(8, 12, 23, 0.8);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+            padding-inline: clamp(20px, 3vw, 60px);
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: stretch;
+            gap: 1.5rem;
+            transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+            will-change: transform;
+            padding: 2rem 0;
+            transform: translateX(0);
+        }
+
+        .carousel-item {
+            flex: 0 0 calc((100% - 4.5rem) / 4);
+            min-width: 260px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 35px 80px rgba(15, 23, 42, 0.18);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(8, 12, 25, 0.88);
+            color: #cbd5e1;
+            box-shadow: 0 25px 60px rgba(10, 14, 23, 0.25);
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+        }
+
+        .carousel-arrow:hover {
+            transform: translateY(-50%) scale(1.04);
+            background: rgba(255, 255, 255, 0.08);
+            color: #f8fafc;
+        }
+
+        .carousel-arrow.left {
+            left: 1rem;
+        }
+
+        .carousel-arrow.right {
+            right: 1rem;
+        }
+
+        .carousel-fade {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .carousel-fade::before,
+        .carousel-fade::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 6rem;
+            pointer-events: none;
+        }
+
+        .carousel-fade::before {
+            left: 0;
+            background: linear-gradient(90deg, rgba(5, 8, 16, 0.95), transparent 60%);
+        }
+
+        .carousel-fade::after {
+            right: 0;
+            background: linear-gradient(270deg, rgba(5, 8, 16, 0.95), transparent 60%);
+        }
+
+        .carousel-viewport {
+            touch-action: pan-y;
+        }
+
+        #mobile-menu.mobile-menu-closed {
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-12px);
+            padding-top: 0;
+            padding-bottom: 0;
+            filter: blur(4px);
+            pointer-events: none;
+        }
+
+        #mobile-menu {
+            overflow: hidden;
+            transition: max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 0.28s ease,
+                        padding 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: max-height, opacity, transform;
+            backdrop-filter: blur(16px);
+            background: rgba(10, 14, 25, 0.9);
+        }
+
+        #mobile-menu.mobile-menu-open {
+            max-height: 520px;
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+            pointer-events: auto;
+        }
+
+        #mobile-menu a {
+            display: block;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: transform 0.28s ease, opacity 0.28s ease;
+        }
+
+        #mobile-menu.mobile-menu-open a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #mobile-menu.mobile-menu-open a:nth-child(1) { transition-delay: 0.05s; }
+        #mobile-menu.mobile-menu-open a:nth-child(2) { transition-delay: 0.10s; }
+        #mobile-menu.mobile-menu-open a:nth-child(3) { transition-delay: 0.15s; }
+        #mobile-menu.mobile-menu-open a:nth-child(4) { transition-delay: 0.20s; }
+        #mobile-menu.mobile-menu-open a:nth-child(5) { transition-delay: 0.25s; }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @media (max-width: 1023px) {
+            .carousel-item {
+                flex: 0 0 calc((100% - 1.5rem) / 2);
+            }
+
+            .carousel-arrow.left {
+                left: 0.75rem;
+            }
+
+            .carousel-arrow.right {
+                right: 0.75rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .carousel-item {
+                flex: 0 0 calc(100% - 1rem);
+            }
+
+            .carousel-arrow {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .carousel-arrow.left {
+                left: 0.5rem;
+            }
+
+            .carousel-arrow.right {
+                right: 0.5rem;
+            }
+        }
+
+        @media (max-width: 425px) {
+            #mobile-menu {
+                text-align: center;
+            }
+
+            #mobile-menu a {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .carousel-viewport {
+                padding-inline: 24px;
+            }
+
+            .carousel-item {
+                flex: 0 0 calc(100% - 2.5rem);
+            }
+        }
+
+        /* ABOUT SECTION RESPONSIVE FIX */
+        @media (max-width: 767px) {
+            #about .max-w-7xl > .grid {
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* 'Unwrap' the text container so its inner elements act as direct flex items */
+            #about .order-1.md\:order-2 {
+                display: contents;
+            }
+
+            /* 1. Heading stays at the very top */
+            #about h2.text-4xl {
+                order: 1;
+            }
+
+            /* 2. Image container slides right under the heading */
+            #about .relative.order-2 {
+                order: 2;
+                margin-top: 0.5rem;
+                margin-bottom: 1.5rem;
+                width: 100%;
+            }
+
+            #about img {
+                width: 100%;
+            }
+
+            /* 3. Paragraph text goes under the image */
+            #about p.text-gray-400 {
+                order: 3;
+                margin-bottom: 0.5rem; /* Shaves down the excessive space below paragraph */
+            }
+
+            /* 4. The V3 Parent Group card sits at the very bottom */
+            #about .grid.grid-cols-2 {
+                order: 4;
+                margin-top: 0.5rem; /* Neutralizes the HTML mt-10 utility class on mobile screens */
+            }
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2563eb;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden hero-pattern">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex flex-col">
+                    <span class="text-2xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
+                        V4 PAPER MART
+                    </span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold -mt-1">A Branch of V3 Group</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-sm font-medium hover:text-blue-400 transition-colors">Home</a>
+                        <a href="#about" class="text-sm font-medium hover:text-blue-400 transition-colors">About</a>
+                        <a href="#products" class="text-sm font-medium hover:text-blue-400 transition-colors">Products</a>
+                        <a href="#services" class="text-sm font-medium hover:text-blue-400 transition-colors">Services</a>
+                        <a href="#contact" class="text-sm font-medium hover:text-blue-400 transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu mobile-menu-closed md:hidden glass px-6 pt-2 pb-6 space-y-4" aria-expanded="false">
+            <a href="#home" class="block text-lg">Home</a>
+            <a href="#about" class="block text-lg">About</a>
+            <a href="#products" class="block text-lg">Products</a>
+            <a href="#services" class="block text-lg">Services</a>
+            <a href="#contact" class="block text-lg">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="relative pt-48 pb-32 px-6 min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-1/4 -left-20 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full"></div>
+
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-5 py-2 mb-10">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-[0.3em]">Official Branch of V3 Group</span>
+            </div>
+            
+            <h1 class="text-7xl md:text-9xl font-[900] leading-none mb-4 tracking-tighter">
+                V4 <span class="text-blue-500">PAPER</span> MART
+            </h1>
+            <h2 class="text-2xl md:text-4xl font-light text-gray-400 mb-12 tracking-wide uppercase">
+                Whole Sale & Retail in Manjeri
+            </h2>
+            
+            <p class="text-gray-500 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                Experience the legacy of V3 at our Manjeri branch. We specialize in high-quality notebooks and school supplies retail.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#products" class="bg-blue-600 hover:bg-blue-500 text-white px-12 py-6 rounded-2xl font-bold transition-all glow-blue flex items-center group text-lg">
+                    Shop Collection
+                    <i class="fas fa-shopping-bag ml-3 group-hover:scale-110 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="mt-24 grid grid-cols-2 md:grid-cols-3 gap-8 border-t border-white/5 pt-12">
+                <div>
+                    <p class="text-3xl font-bold text-white mb-1">V3</p>
+                    <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Parent Legacy</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white mb-1">2 years</p>
+                    <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">In Business</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white mb-1">Manjeri</p>
+                    <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Local Branch</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us with Cross-Fade Slideshow -->
+    <section id="about" class="py-12 md:py-24 px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-20 items-center">
+                
+                <!-- Slide Window Wrapper Container -->
+                <div class="relative order-2 md:order-1 w-full">
+                    <div class="aspect-square bg-blue-600/5 absolute -inset-4 rounded-full blur-3xl"></div>
+                    
+                    <!-- Fixed Aspect Container houses stacked absolute elements -->
+                    <div id="about-slideshow" class="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+                        <!-- Image 1 (Active by default) -->
+                        <img src="https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?auto=format&fit=crop&q=80&w=800" alt="V4 Branch Interior" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out opacity-100">
+                        <!-- Image 2 (Hidden by default) -->
+                        <img src="images/outside view.jpeg" alt="Premium Stationery Supplies" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out opacity-0">
+                        <!-- Image 3 (Hidden by default) -->
+                        <img src="images/inside view of shop.jpeg" alt="V4 Paper Mart Notebooks" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out opacity-0">
+                    </div>
+                </div>
+
+                <div class="order-1 md:order-2">
+                    <h2 class="text-4xl font-extrabold mb-6">
+                        A Trusted Legacy <br/>
+                        <span class="text-blue-500">V4 is a Branch of V3</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg mb-6">
+                        V4 Paper Mart proudly extends the excellence of the V3 group to the heart of Manjeri. We aim to deliver exceptional value and service to our customers. We Provide a wide range of high-quality notebooks and stationery products, catering to the needs of students, professionals, and artists alike.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mt-10">
+                        <div class="glass p-6 rounded-2xl">
+                            <h4 class="text-blue-500 text-3xl font-bold mb-1">V3</h4>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">
+                                Parent Group
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-16 underline decoration-blue-600 underline-offset-8">Our Core Services</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="glass p-10 rounded-3xl hover:bg-blue-600/5 transition-all">
+                    <i class="fas fa-scroll text-blue-500 text-4xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-4">Bulk Notebook Purchase</h3>
+                    <p class="text-gray-400 leading-relaxed">Specialized wholesale procurement for educational institutions and coaching centers in Manjeri.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl hover:bg-blue-600/5 transition-all">
+                    <i class="fas fa-pencil-ruler text-blue-500 text-4xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-4">Retail Stationery</h3>
+                    <p class="text-gray-400 leading-relaxed">A curated collection of international and local stationery brands for everyday school and office use.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl hover:bg-blue-600/5 transition-all">
+                    <i class="fas fa-stamp text-blue-500 text-4xl mb-6"></i>
+                    <h3 class="text-xl font-bold mb-4">Office Essentials</h3>
+                    <p class="text-gray-400 leading-relaxed">office supplies, printing paper, note books etc</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-24 px-6 bg-[#080808]">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
+                <div>
+                    <h2 class="text-4xl font-extrabold mb-2">Featured Product Showcase</h2>
+                    <p class="text-gray-400 max-w-2xl">A premium carousel with smooth transitions, subtle edge fade, and infinite looping for a luxury ecommerce feel.</p>
+                </div>
+            </div>
+
+            <div class="relative">
+                <button id="prev-products" class="carousel-arrow left text-lg" aria-label="Previous products">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="next-products" class="carousel-arrow right text-lg" aria-label="Next products">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <div class="carousel-viewport mt-3">
+                    <div class="carousel-fade"></div>
+                    <div id="product-carousel" class="carousel-track no-scrollbar">
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="images/WhatsApp Image 2026-04-03 at 7.23.58 AM.jpeg" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">V3 Notebooks</h3>
+                        </div>
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="images/Madrasa note-book.jpeg" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">V3 Madrasa Notebooks</h3>                        
+                        </div>
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="https://st.depositphotos.com/1177973/1950/i/450/depositphotos_19503785-stock-photo-school-supplies-with-apple-on.jpg" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">school items</h3>                        
+                        </div>
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="https://m.media-amazon.com/images/I/61jgqTaxwKL._AC_UF350,350_QL80_.jpg" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">Professional Pens</h3>                        
+                        </div>
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNiR2TLdz6r3kiV1DSswnZjob8-LV1vL-k7g&s" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">School Bags</h3>                        
+                        </div>
+                        <div class="glass p-5 rounded-[2rem] product-card carousel-item border border-white/5">
+                            <img src="https://m.media-amazon.com/images/I/61+ngBB7HyL._AC_UF350,350_QL80_.jpg" class="w-full h-56 object-cover rounded-2xl mb-4">
+                            <h3 class="font-bold text-lg mb-1">Art Painting Set</h3>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact -->
+    <section id="contact" class="py-12 md:py-24 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-16">
+                <div class="max-w-2xl mx-auto"> 
+                    <h2 class="text-3xl md:text-4xl font-extrabold mb-8 md:mb-10 text-center">Visit Our Store</h2>
+                    <div class="space-y-6 md:space-y-10">
+                        <div class="flex items-start group justify-center md:justify-start">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-blue-600/10 rounded-2xl flex items-center justify-center mr-4 md:mr-6 group-hover:bg-blue-600 transition-colors flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-blue-400 group-hover:text-white text-lg md:text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <h4 class="font-bold text-lg md:text-xl mb-1">Our Location</h4>
+                                <p class="text-gray-400 text-sm md:text-base">V4 Paper Mart (V3 Branch), Pandikkad Road,<br/>Manjeri, Malappuram, Kerala, India</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 md:pt-6 text-center">
+                            <h4 class="font-bold text-lg md:text-xl mb-4 md:mb-6">Direct Support</h4>
+                            <a href="https://wa.me/919037160949" target="_blank" class="whatsapp-btn flex items-center justify-center w-full md:w-80 py-4 md:py-5 rounded-[2rem] text-white font-extrabold text-base md:text-lg hover:scale-105 transition-transform duration-300">
+                                <i class="fab fa-whatsapp text-2xl md:text-3xl mr-3"></i>
+                                Chat on WhatsApp
+                            </a>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 pt-4">
+                            <div class="flex flex-col text-center">
+                                <span class="text-gray-500 text-xs md:text-sm font-bold uppercase tracking-widest">Phone</span>
+                                <span class="text-lg md:text-xl font-bold">+91 9037160949</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] relative mt-8 md:mt-0">
+                    <h3 class="text-xl md:text-2xl font-extrabold mb-6 md:mb-8">Find Us on Map</h3>
+                    <div class="md:h-80 rounded-xl md:rounded-2xl overflow-hidden">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.0!2d76.3!3d11.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTEuMcKwIDc2LjPCsA!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-6 md:py-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16 text-center md:text-left">
+            <div>
+                <span class="text-lg md:text-2xl font-black text-blue-500">V4 PAPER MART</span>
+                <p class="text-gray-500 mt-2 md:mt-4 text-xs md:text-sm leading-relaxed">
+                    Proud branch of V3 Group. Stationery hub in Manjeri, Kerala.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm md:text-lg mb-3 md:mb-6">Open At</h4>
+                <ul class="text-gray-500 space-y-1 md:space-y-3 text-xs md:text-sm">
+                    <li class="flex flex-col sm:flex-row justify-between md:justify-start md:space-x-4"><span>Mon - Sun:</span> <span class="text-white">8 AM - 10 PM</span></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-sm md:text-lg mb-3 md:mb-6">Find Us</h4>
+                <div class="flex justify-center md:justify-start space-x-4 md:space-x-6 text-lg md:text-2xl">
+                    <a href="https://www.instagram.com/v4_papermart?igsh=ZmFtZXMwdnhqMGVx" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/5 mt-6 md:mt-16 pt-4 md:pt-8 text-center">
+            <p class="text-gray-600 text-xs tracking-widest font-bold">© 2026 V4 PAPER MART MANJERI</p>
+        </div>
+    </footer>
+
+    <!-- Scripts Section -->
+    <script>
+        const menuBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const carousel = document.getElementById('product-carousel');
+        const prevProducts = document.getElementById('prev-products');
+        const nextProducts = document.getElementById('next-products');
+
+        const closeMobileMenu = () => {
+            mobileMenu.classList.remove('mobile-menu-open');
+            mobileMenu.classList.add('mobile-menu-closed');
+            mobileMenu.setAttribute('aria-expanded', 'false');
+        };
+
+        const openMobileMenu = () => {
+            mobileMenu.classList.remove('mobile-menu-closed');
+            mobileMenu.classList.add('mobile-menu-open');
+            mobileMenu.setAttribute('aria-expanded', 'true');
+        };
+
+        menuBtn.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('mobile-menu-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+
+        const originalSlides = Array.from(carousel.children);
+        let carouselSlides = originalSlides;
+        let slideWidth = 0;
+        let slideGap = 0;
+        let currentIndex = 0;
+        let isTransitioning = false;
+        let pointerActive = false;
+        let pointerStartX = 0;
+        let dragDelta = 0;
+        const transitionStyle = 'transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+        const visibleSlides = () => {
+            if (window.innerWidth >= 1024) return 4;
+            if (window.innerWidth >= 768) return 2;
+            return 1;
+        };
+
+        const maxIndex = () => {
+            return Math.max(0, originalSlides.length - visibleSlides());
+        };
+
+        const updateDimensions = () => {
+            slideGap = parseFloat(getComputedStyle(carousel).gap) || 24;
+            slideWidth = carouselSlides[0].getBoundingClientRect().width;
+
+            clampIndex();
+            carousel.style.transition = 'none';
+            setPosition(0);
+            requestAnimationFrame(() => {
+                carousel.style.transition = transitionStyle;
+            });
+        };
+
+        const getViewportPadding = () => {
+            const styles = getComputedStyle(carouselViewport);
+            return parseFloat(styles.paddingLeft) || 0;
+        };
+
+        const getCarouselContentWidth = () => {
+            return carouselViewport.clientWidth - getViewportPadding() * 2;
+        };
+
+        const centerOffset = () => {
+            if (window.innerWidth <= 320 && visibleSlides() === 1) {
+                return (getCarouselContentWidth() - slideWidth) / 2;
+            }
+            return 0;
+        };
+
+        const setPosition = (offset = 0) => {
+            const base = -(currentIndex * (slideWidth + slideGap)) + centerOffset();
+            carousel.style.transform = `translateX(${base + offset}px)`;
+        };
+
+        const clampIndex = () => {
+            currentIndex = Math.min(Math.max(currentIndex, 0), maxIndex());
+        };
+
+        const moveSlide = (direction) => {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            currentIndex += direction;
+            clampIndex();
+            setPosition();
+        };
+
+        prevProducts.addEventListener('click', () => moveSlide(-1));
+        nextProducts.addEventListener('click', () => moveSlide(1));
+
+        carousel.addEventListener('transitionend', () => {
+            isTransitioning = false;
+        });
+
+        const carouselViewport = carousel.parentElement;
+
+        carouselViewport.addEventListener('pointerdown', (event) => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            pointerActive = true;
+            pointerStartX = event.clientX;
+            dragDelta = 0;
+            carousel.style.transition = 'none';
+            carousel.setPointerCapture(event.pointerId);
+        });
+
+        carouselViewport.addEventListener('pointermove', (event) => {
+            if (!pointerActive) return;
+            dragDelta = event.clientX - pointerStartX;
+            setPosition(dragDelta);
+        });
+
+        const endDrag = () => {
+            if (!pointerActive) return;
+            pointerActive = false;
+            carousel.style.transition = transitionStyle;
+
+            if (Math.abs(dragDelta) > 70) {
+                moveSlide(dragDelta < 0 ? 1 : -1);
+            } else {
+                setPosition();
+            }
+        };
+
+        ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((eventName) => {
+            carouselViewport.addEventListener(eventName, endDrag);
+        });
+
+        window.addEventListener('resize', updateDimensions);
+        updateDimensions();
+
+
+        /* ==========================================================================
+           ABOUT SECTION AUTOMATIC CROSS-FADE SLIDESHOW SCRIPT
+           ========================================================================== */
+        const initAboutSlideshow = () => {
+            const container = document.getElementById('about-slideshow');
+            if (!container) return;
+            
+            const slides = container.querySelectorAll('img');
+            let activeSlideIndex = 0;
+            const slideIntervalDelay = 4000; // Time each image stays completely visible (4 seconds)
+
+            setInterval(() => {
+                // Fade out current slide
+                slides[activeSlideIndex].classList.remove('opacity-100');
+                slides[activeSlideIndex].classList.add('opacity-0');
+
+                // Shift targeting pointer forward inside matrix limits
+                activeSlideIndex = (activeSlideIndex + 1) % slides.length;
+
+                // Fade in next slide smoothly
+                slides[activeSlideIndex].classList.remove('opacity-0');
+                slides[activeSlideIndex].classList.add('opacity-100');
+            }, slideIntervalDelay);
+        };
+
+        // Initialize script execution 
+        initAboutSlideshow();
+    </script>
+</body>
+</html>
