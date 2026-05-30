@@ -3,11 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V4 Paper Mart | A Branch of V3 | Stationery Shop</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>V4 Paper Mart Manjeri | Wholesale & Retail Stationery Shop</title>
+    <meta name="title" content="V4 Paper Mart Manjeri | Wholesale & Retail Stationery Shop">
+    <meta name="description" content="V4 Paper Mart in Manjeri (Official branch of V3 Group) offers premium wholesale & retail notebooks, school supplies, and office stationery essentials. Visit us on Pandikkad Road!">
+    <meta name="keywords" content="V4 Paper Mart, V3 Paper Mart, stationery shop Manjeri, notebook wholesale Malappuram, school supplies Manjeri, office stationery Kerala, bulk notebook purchase, Pandikkad road shop">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="V4 Paper Mart">
+    
+    <!-- Local SEO Geo Tags (Targeting Manjeri, Kerala) -->
+    <meta name="geo.region" content="IN-KL">
+    <meta name="geo.placename" content="Manjeri, Malappuram, Kerala">
+    <meta name="geo.position" content="11.1214;76.1211">
+    <meta name="ICBM" content="11.1214, 76.1211">
+
+    <!-- Open Graph / Facebook / WhatsApp Link Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.v4papermart.com/"> <!-- Replace with your live URL later -->
+    <meta property="og:title" content="V4 Paper Mart Manjeri | Wholesale & Retail Stationery Shop">
+    <meta property="og:description" content="Official branch of V3 Group. Get high-quality notebooks, school supplies, and office essentials at retail and wholesale prices.">
+    <meta property="og:image" content="images/outside%20view.jpeg"> <!-- Points to your outside view image -->
+    <meta property="og:site_name" content="V4 Paper Mart">
+
+    <!-- Twitter Cards -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.v4papermart.com/">
+    <meta property="twitter:title" content="V4 Paper Mart Manjeri | Wholesale & Retail Stationery Shop">
+    <meta property="twitter:description" content="Official branch of V3 Group. Get high-quality notebooks, school supplies, and office essentials at retail and wholesale prices.">
+    <meta property="twitter:image" content="images/outside%20view.jpeg">
+
+    <!-- Google-friendly Local Business Schema (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "V4 Paper Mart",
+      "image": [
+        "images/outside%20view.jpeg",
+        "images/inside%20view%20of%20shop.jpeg"
+      ],
+      "url": "https://www.v4papermart.com/",
+      "telephone": "+919037160949",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Pandikkad Road",
+        "addressLocality": "Manjeri",
+        "addressRegion": "Kerala",
+        "postalCode": "676121",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 11.1214,
+        "longitude": 76.1211
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "08:00",
+        "closes": "22:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/v4_papermart"
+      ],
+      "parentOrganization": {
+        "@type": "Organization",
+        "name": "V3 Group"
+      }
+    }
+    </script>
+
+    <!-- Stylesheets & Fonts (Unchanged) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;600;700;800&display=swap');
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -48,6 +129,7 @@
             background: rgba(8, 12, 23, 0.8);
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
             padding-inline: clamp(20px, 3vw, 60px);
+            touch-action: pan-y;
         }
 
         .carousel-track {
@@ -95,13 +177,8 @@
             color: #f8fafc;
         }
 
-        .carousel-arrow.left {
-            left: 1rem;
-        }
-
-        .carousel-arrow.right {
-            right: 1rem;
-        }
+        .carousel-arrow.left { left: 1rem; }
+        .carousel-arrow.right { right: 1rem; }
 
         .carousel-fade {
             position: absolute;
@@ -127,10 +204,6 @@
         .carousel-fade::after {
             right: 0;
             background: linear-gradient(270deg, rgba(5, 8, 16, 0.95), transparent 60%);
-        }
-
-        .carousel-viewport {
-            touch-action: pan-y;
         }
 
         #mobile-menu.mobile-menu-closed {
@@ -181,66 +254,33 @@
         #mobile-menu.mobile-menu-open a:nth-child(4) { transition-delay: 0.20s; }
         #mobile-menu.mobile-menu-open a:nth-child(5) { transition-delay: 0.25s; }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
 
         @media (max-width: 1023px) {
-            .carousel-item {
-                flex: 0 0 calc((100% - 1.5rem) / 2);
-            }
-
-            .carousel-arrow.left {
-                left: 0.75rem;
-            }
-
-            .carousel-arrow.right {
-                right: 0.75rem;
-            }
+            .carousel-item { flex: 0 0 calc((100% - 1.5rem) / 2); }
+            .carousel-arrow.left { left: 0.75rem; }
+            .carousel-arrow.right { right: 0.75rem; }
         }
 
         @media (max-width: 767px) {
-            .carousel-item {
-                flex: 0 0 calc(100% - 1rem);
-            }
-
-            .carousel-arrow {
-                width: 3rem;
-                height: 3rem;
-            }
-
-            .carousel-arrow.left {
-                left: 0.5rem;
-            }
-
-            .carousel-arrow.right {
-                right: 0.5rem;
-            }
+            .carousel-item { flex: 0 0 calc(100% - 1rem); }
+            .carousel-arrow { width: 3rem; height: 3rem; }
+            .carousel-arrow.left { left: 0.5rem; }
+            .carousel-arrow.right { right: 0.5rem; }
         }
 
         @media (max-width: 425px) {
-            #mobile-menu {
-                text-align: center;
-            }
-
-            #mobile-menu a {
-                margin-left: auto;
-                margin-right: auto;
-            }
+            #mobile-menu { text-align: center; }
+            #mobile-menu a { margin-left: auto; margin-right: auto; }
         }
 
         @media (max-width: 320px) {
-            .carousel-viewport {
-                padding-inline: 24px;
-            }
-
-            .carousel-item {
-                flex: 0 0 calc(100% - 2.5rem);
-            }
+            .carousel-viewport { padding-inline: 24px; }
+            .carousel-item { flex: 0 0 calc(100% - 2.5rem); }
         }
 
         /* ABOUT SECTION RESPONSIVE FIX */
@@ -249,39 +289,22 @@
                 display: flex;
                 flex-direction: column;
             }
-
-            /* 'Unwrap' the text container so its inner elements act as direct flex items */
-            #about .order-1.md\:order-2 {
-                display: contents;
-            }
-
-            /* 1. Heading stays at the very top */
-            #about h2.text-4xl {
-                order: 1;
-            }
-
-            /* 2. Image container slides right under the heading */
+            #about .order-1.md\:order-2 { display: contents; }
+            #about h2.text-4xl { order: 1; }
             #about .relative.order-2 {
                 order: 2;
                 margin-top: 0.5rem;
                 margin-bottom: 1.5rem;
                 width: 100%;
             }
-
-            #about img {
-                width: 100%;
-            }
-
-            /* 3. Paragraph text goes under the image */
+            #about img { width: 100%; }
             #about p.text-gray-400 {
                 order: 3;
-                margin-bottom: 0.5rem; /* Shaves down the excessive space below paragraph */
+                margin-bottom: 0.5rem;
             }
-
-            /* 4. The V3 Parent Group card sits at the very bottom */
             #about .grid.grid-cols-2 {
                 order: 4;
-                margin-top: 0.5rem; /* Neutralizes the HTML mt-10 utility class on mobile screens */
+                margin-top: 0.5rem;
             }
         }
         
@@ -290,13 +313,8 @@
             box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb {
             background: #2563eb;
             border-radius: 10px;
